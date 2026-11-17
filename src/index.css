@@ -1,0 +1,312 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme inline {
+  --color-bg: var(--rf-bg);
+  --color-surface: var(--rf-surface);
+  --color-elevated: var(--rf-elevated);
+  --color-border: var(--rf-border);
+  --color-fg: var(--rf-fg);
+  --color-muted: var(--rf-muted);
+  --color-accent: var(--rf-accent);
+  --color-accent-fg: var(--rf-accent-fg);
+  --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-serif: "Source Serif 4", Georgia, serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, monospace;
+}
+
+:root {
+  --rf-bg: #ffffff;
+  --rf-surface: #f6f6f8;
+  --rf-elevated: #ffffff;
+  --rf-border: #e4e4ea;
+  --rf-fg: #0b0b10;
+  --rf-muted: #64697a;
+  --rf-accent: #4f46e5;
+  --rf-accent-fg: #ffffff;
+}
+
+.dark {
+  --rf-bg: #08090c;
+  --rf-surface: #0e1015;
+  --rf-elevated: #12141a;
+  --rf-border: #24262f;
+  --rf-fg: #f2f3f7;
+  --rf-muted: #9aa0b0;
+  --rf-accent: #8585ff;
+  --rf-accent-fg: #0a0a12;
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    scroll-padding-top: 5rem;
+  }
+
+  body {
+    @apply bg-bg text-fg antialiased;
+    font-family: var(--font-sans);
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--rf-accent);
+    outline-offset: 2px;
+  }
+
+  ::selection {
+    background: color-mix(in oklab, var(--rf-accent) 24%, transparent);
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    text-wrap: balance;
+  }
+}
+
+@layer components {
+  .btn {
+    @apply inline-flex shrink-0 cursor-pointer items-center justify-center gap-2 rounded-xl font-medium transition-all duration-150 select-none disabled:pointer-events-none disabled:opacity-50;
+  }
+  .btn-primary {
+    @apply bg-accent text-accent-fg shadow-sm hover:brightness-110 active:brightness-95;
+  }
+  .btn-secondary {
+    @apply border border-border bg-elevated text-fg hover:bg-surface hover:border-muted/40;
+  }
+  .btn-ghost {
+    @apply text-muted hover:bg-surface hover:text-fg;
+  }
+  .btn-danger {
+    @apply bg-rose-600 text-white hover:bg-rose-700;
+  }
+  .btn-sm {
+    @apply h-8 rounded-lg px-3 text-xs;
+  }
+  .btn-md {
+    @apply h-10 px-4 text-sm;
+  }
+  .btn-lg {
+    @apply h-12 rounded-xl px-6 text-[0.95rem];
+  }
+
+  .input {
+    @apply w-full rounded-lg border border-border bg-elevated px-3 py-2 text-sm text-fg shadow-xs transition-colors placeholder:text-muted/70 hover:border-muted/40 focus:border-accent focus:ring-2 focus:ring-accent/20 focus:outline-none;
+  }
+  .input-sm {
+    @apply px-2.5 py-1.5 text-xs;
+  }
+
+  .label {
+    @apply mb-1.5 block text-xs font-medium tracking-wide text-muted;
+  }
+
+  .card {
+    @apply rounded-2xl border border-border bg-elevated;
+  }
+
+  .chip {
+    @apply inline-flex items-center gap-1 rounded-full border border-border bg-surface px-2.5 py-1 text-xs font-medium text-muted;
+  }
+
+  .hairline {
+    @apply border-t border-border;
+  }
+
+  .link {
+    @apply text-accent underline-offset-4 hover:underline;
+  }
+}
+
+/* ---------- Landing helpers ---------- */
+.grid-bg {
+  background-image:
+    linear-gradient(to right, color-mix(in oklab, var(--rf-border) 65%, transparent) 1px, transparent 1px),
+    linear-gradient(to bottom, color-mix(in oklab, var(--rf-border) 65%, transparent) 1px, transparent 1px);
+  background-size: 56px 56px;
+  mask-image: radial-gradient(ellipse 70% 60% at 50% 0%, #000 40%, transparent 100%);
+}
+
+@keyframes rf-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.animate-fade-up {
+  animation: rf-fade-up 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes rf-pop {
+  from {
+    opacity: 0;
+    transform: scale(0.97) translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.animate-pop {
+  animation: rf-pop 0.18s ease-out both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ---------- Resume canvas ---------- */
+.resume-paper {
+  width: 210mm;
+  min-height: 297mm;
+  padding: 16mm;
+  background: #ffffff;
+  color: #16181d;
+  position: relative;
+  font-family: var(--rf-font, "Inter", Arial, sans-serif);
+  font-size: var(--rf-font-size, 10.5px);
+  line-height: 1.45;
+  -webkit-font-smoothing: antialiased;
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+
+.resume-paper :where(p, h1, h2, h3, h4, ul, li) {
+  margin: 0;
+  padding: 0;
+}
+
+.resume-paper :where(ul) {
+  list-style: none;
+}
+
+.rf-section {
+  margin-top: calc(1.15em * var(--rf-spacing, 1));
+}
+
+.rf-item + .rf-item {
+  margin-top: calc(0.72em * var(--rf-spacing, 1));
+}
+
+.rf-bullets {
+  margin-top: calc(0.32em * var(--rf-spacing, 1));
+  display: flex;
+  flex-direction: column;
+  gap: calc(0.2em * var(--rf-spacing, 1));
+}
+
+.rf-bullets li {
+  display: flex;
+  gap: 0.5em;
+  align-items: flex-start;
+}
+
+.rf-bullet-mark {
+  flex: none;
+  line-height: inherit;
+}
+
+.rf-block {
+  break-inside: avoid;
+  page-break-inside: avoid;
+}
+
+.rf-heading {
+  break-after: avoid;
+  page-break-after: avoid;
+}
+
+.rf-guides {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: repeating-linear-gradient(
+    to bottom,
+    transparent 0 264.5mm,
+    color-mix(in oklab, #64748b 45%, transparent) 264.5mm 265mm,
+    transparent 265mm 297mm
+  );
+}
+
+.resume-paper a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.paper-shadow {
+  box-shadow:
+    0 1px 1px rgba(9, 9, 11, 0.04),
+    0 12px 32px -12px rgba(9, 9, 11, 0.18),
+    0 0 0 1px rgba(9, 9, 11, 0.06);
+}
+
+.dark .paper-shadow {
+  box-shadow:
+    0 1px 1px rgba(0, 0, 0, 0.4),
+    0 20px 48px -16px rgba(0, 0, 0, 0.7),
+    0 0 0 1px rgba(255, 255, 255, 0.08);
+}
+
+.scroll-thin {
+  scrollbar-width: thin;
+  scrollbar-color: color-mix(in oklab, var(--rf-muted) 35%, transparent) transparent;
+}
+
+/* ---------- Print / PDF ---------- */
+.print-root {
+  display: none;
+}
+
+@page {
+  size: A4;
+  margin: 16mm;
+}
+
+@media print {
+  html,
+  body {
+    background: #ffffff !important;
+    height: auto !important;
+  }
+
+  .has-print-root .app-root {
+    display: none !important;
+  }
+
+  .has-print-root .print-root {
+    display: block !important;
+  }
+
+  .resume-paper {
+    width: auto !important;
+    min-height: 0 !important;
+    padding: 0 !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+    zoom: 1 !important;
+  }
+
+  .rf-guides {
+    display: none !important;
+  }
+
+  .paper-shadow {
+    box-shadow: none !important;
+  }
+}
